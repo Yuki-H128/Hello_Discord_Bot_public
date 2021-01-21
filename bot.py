@@ -117,6 +117,11 @@ async def omikuji_reset_command(ctx):
 async def clear(ctx, amount=100):
     await ctx.channel.purge(limit=amount)
 
+#現在の時刻を表示
+@client.command(aliases=['時刻'])
+@commands.has_permissions(administrator=True)
+async def jikoku_command(ctx):
+    await ctx.send(f'{datetime.now()}')
 
 loop.start()
 
