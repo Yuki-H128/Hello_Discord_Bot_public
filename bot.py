@@ -46,6 +46,7 @@ async def touroku_reset_command(ctx):
     name = ctx.message.author
     touroku = pickle_load('./touroku.pickle')
     touroku[name.id] = []
+    pickle_dump(touroku, './touroku.pickle')
     await ctx.send('リセットしました')
 
 @client.command(aliases=['確認'])
