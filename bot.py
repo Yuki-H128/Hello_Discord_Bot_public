@@ -40,16 +40,12 @@ async def touroku(ctx, time, op :int = None):
         await ctx.send(f'{len(touroku[name])}日後の起きる時間を設定しました。')
     pickle_dump(touroku, './touroku.pickle')
 
-#登録リセット
-def touroku_reset():
-    kara = {}
-    pickle_dump(kara, './touroku.pickle')
-
 #登録リセットコマンド
 @client.command(aliases=['登録リセット'])
-@commands.has_permissions(administrator=True)
 async def touroku_reset_command(ctx):
-    touroku_reset()
+    name = ctx.message.author
+    touroku = pickle_load('./touroku.pickle')
+    touroku[name.id] = []
     await ctx.send('リセットしました')
 
 @client.command(aliases=['確認'])
