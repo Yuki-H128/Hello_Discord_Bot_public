@@ -26,19 +26,23 @@ async def touroku(ctx, time, op :int = None):
         return
     name = ctx.message.author.id
     touroku = pickle_load('./touroku.pickle')
+    okita = pickle_load('./okita.pickle')
     if op != None:
         try:
             touroku[name][op-1] = time
+            okita[name] = False
             await ctx.send(f'{op}日後の起きる時間を変更しました。')
         except:
             await ctx.send(f'{op}日後は登録されていないので変更できません。')
     else:
         try:
             touroku[name].append(time)
+            okita[name] = False
         except:
             touroku[name] = [time]
         await ctx.send(f'{len(touroku[name])}日後の起きる時間を設定しました。')
     pickle_dump(touroku, './touroku.pickle')
+    pickle_dump(okita, 'okita.pickle')
 
 #登録リセットコマンド
 @client.command(aliases=['登録リセット'])
@@ -65,16 +69,22 @@ async def okita(ctx):
     name = ctx.message.author
     role = ctx.guild.get_role(801231107861381170)
     touroku = pickle_load('./touroku.pickle')
-    yotei = datetime.strptime(touroku[name.id].pop(0), dateFormatter)
-    now = datetime.strptime(f'{datetime.now().hour}:{datetime.now().minute}', dateFormatter)
-    if yotei > now:
-        await ctx.send(f'{name.display_name}さん！おはようございます！さすが～')
-        await name.remove_roles(role)
+    okita = pickle_load('./okita.pickle')
+    if okita[name.id] == True:
+        yotei = datetime.strptime(touroku[name.id].pop(0), dateFormatter)
+        now = datetime.strptime(f'{datetime.now().hour}:{datetime.now().minute}', dateFormatter)
+        if yotei > now:
+            await ctx.send(f'{name.display_name}さん！おはようございます！さすが～')
+            await name.remove_roles(role)
+        else:
+            await ctx.send(f'{name.display_name}さんは「{yotei.hour:02}:{yotei.minute:02}」あれ？寝坊ですね。')
+            await name.add_roles(role)
+        okita[name.id] = False
     else:
-        await ctx.send(f'{name.display_name}さんは「{yotei.hour:02}:{yotei.minute:02}」あれ？寝坊ですね。')
-        await name.add_roles(role)
+        await ctx.send(f'{name.display_name}さん！今日も早く寝て、朝しっかりと起きましょう！おやすみ～')
 
     pickle_dump(touroku, './touroku.pickle')
+    pickle_dump(okita, 'okita.pickle')
     
 
 @client.command(aliases=['おみくじ'])
@@ -98,17 +108,32 @@ def omikuji_reset():
     kara = []
     pickle_dump(kara, './omikuji.pickle')
 
+#起きたリセット
+def okita_reset():
+    okita = pickle_load('./okita.pickle')
+    for key in okita:
+        okita[key] = True
+    pickle_dump(okita, './okita.pickle')
+
 @tasks.loop(seconds=60)
 async def loop():
     now = datetime.now().strftime(dateFormatter)
     if now == '00:00':
         omikuji_reset()
+        okita_reset()
 
 #おみくじリセットコマンド
 @client.command(aliases=['おみくじリセット'])
 @commands.has_permissions(administrator=True)
 async def omikuji_reset_command(ctx):
     omikuji_reset()
+    await ctx.send('リセットしました')
+
+#起きたリセットコマンド
+@client.command(aliases=['起きたリセット'])
+@commands.has_permissions(administrator=True)
+async def okita_reset_command(ctx):
+    okita_reset()
     await ctx.send('リセットしました')
 
 #メッセージ削除コマンド
