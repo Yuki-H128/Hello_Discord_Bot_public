@@ -68,10 +68,7 @@ async def kakunin(ctx):
 async def okita(ctx):
     name = ctx.message.author
     #role = ctx.guild.get_role(801231107861381170)
-    try:
-        role = discord.utils.get(ctx.message.guild.roles, name="寝坊")
-    except:
-        role = ctx.message.guild.roles.creat('寝坊')
+    role = discord.utils.get(ctx.message.guild.roles, name="寝坊")
     touroku = pickle_load('./touroku.pickle')
     okita = pickle_load('./okita.pickle')
     if okita[name.id] == True:
