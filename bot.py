@@ -67,7 +67,8 @@ async def kakunin(ctx):
 @client.command(aliases=['起きた'])
 async def okita(ctx):
     name = ctx.message.author
-    role = ctx.guild.get_role(801231107861381170)
+    #role = ctx.guild.get_role(801231107861381170)
+    role = discord.utils.get(ctx.message.guild.roles, name="寝坊")
     touroku = pickle_load('./touroku.pickle')
     okita = pickle_load('./okita.pickle')
     if okita[name.id] == True:
@@ -130,14 +131,14 @@ async def omikuji_reset_command(ctx):
     omikuji_reset()
     await ctx.send('リセットしました')
 '''
-'''
+
 #起きたリセットコマンド
 @client.command(aliases=['起きたリセット'])
 @commands.has_permissions(administrator=True)
 async def okita_reset_command(ctx):
     okita_reset()
     await ctx.send('リセットしました')
-'''
+
 
 #メッセージ削除コマンド
 @client.command(aliases=['削除'])
