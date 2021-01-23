@@ -37,9 +37,9 @@ async def touroku(ctx, time, op :int = None):
     else:
         try:
             touroku[name].append(time)
-            okita[name] = False
         except:
             touroku[name] = [time]
+        okita[name] = False
         await ctx.send(f'{len(touroku[name])}日後の起きる時間を設定しました。')
     pickle_dump(touroku, './touroku.pickle')
     pickle_dump(okita, 'okita.pickle')
@@ -134,7 +134,7 @@ async def omikuji_reset_command(ctx):
 
 #起きたリセットコマンド
 @client.command(aliases=['起きたリセット'])
-@commands.has_permissions(administrator=True)
+#@commands.has_permissions(administrator=True)
 async def okita_reset_command(ctx):
     okita_reset()
     await ctx.send('リセットしました')
