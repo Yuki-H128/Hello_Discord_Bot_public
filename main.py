@@ -96,7 +96,7 @@ async def reset_check_command(ctx):
 @tasks.loop(seconds=60)
 async def loop():
     now = datetime.now().strftime(dateFormatter)
-    if now == '00:00': reset_check()
+    if now == '03:00': reset_check()
 
 #ループ処理開始
 loop.start()
