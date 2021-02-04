@@ -156,4 +156,4 @@ async def jikoku_command(ctx):
 
 loop.start()
 
-client.run('ODAwODU2MjIxMTcwNDAxMzQx.YAYNeg.auADwBQcJawqaEmiIpsfSUUGmjM')
+client.run('')
