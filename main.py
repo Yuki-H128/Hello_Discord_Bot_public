@@ -101,4 +101,4 @@ async def loop():
 #ループ処理開始
 loop.start()
 
-bot.run('ODAwODU2MjIxMTcwNDAxMzQx.YAYNeg.auADwBQcJawqaEmiIpsfSUUGmjM')
+bot.run('')
